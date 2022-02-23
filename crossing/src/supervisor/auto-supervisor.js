@@ -1,4 +1,4 @@
-class ManualSupervisor{
+class SelfRegulatedSupervisor{
     constructor(){
         
     }

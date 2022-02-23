@@ -1,7 +1,7 @@
 const ToStart = -1;
 const ToEnd = 1;
 
-class Vehicle{
+class DefaultVehicle{
     constructor(x,y,dx,dy){
         this.x = x;
         this.y = y;
@@ -14,7 +14,11 @@ class Vehicle{
         this.width = 20;
         this.height = 35;
 
-        this.visRectangle = new Rotectangle(x,y,dx,dy,this.width,this.height);
+        this.visRectangle = this.getNewVisual();
+    }
+
+    getNewVisual(){
+        return new Rotectangle(this.x,this.y,this.dx,this.dy,this.width,this.height);
     }
 
     setDrivingOn(drivingOn, towards){
@@ -68,8 +72,37 @@ class Vehicle{
     }
 }
 
-class VehicleFactory{
-    static CreateNewVehicle(x,y,dx,dy){
-        return new Vehicle(x,y,dx,dy);
+class SlaveVehicle extends DefaultVehicle{
+    constructor(x,y,dx,dy){
+        super(x,y,dx,dy);
+    }
+
+    getNewVisual(){
+        return new Rotectangle(this.x,this.y,this.dx,this.dy,this.width,this.height,color('rgb(0,0,255)'));
+    }
+
+    doTick(){
+        this.x += this.dx;
+        this.y += this.dy;
+        this.visRectangle.x = this.x;
+        this.visRectangle.y = this.y;
+        this.visRectangle.setDYDX(this.dy,this.dx);
+    }
+}
+
+var vehicleFactory;
+function initVehicleFactory(factory){
+    this.vehicleFactory = factory;
+}
+
+class DefaultVehicleFactory{
+    CreateNewVehicle(x,y,dx,dy){
+        return new DefaultVehicle(x,y,dx,dy);
+    }
+}
+
+class MasterSlaveVehicleFactory{
+    CreateNewVehicle(x,y,dx,dy){
+        return new SlaveVehicle(x,y,dx,dy);
     }
 }

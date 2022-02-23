@@ -158,7 +158,7 @@ class Lane{
         let dx = this.end.x - x;
         let dy = this.end.y - y;
       
-        let v = VehicleFactory.CreateNewVehicle(x,y,dx,dy);
+        let v = vehicleFactory.CreateNewVehicle(x,y,dx,dy);
         v.setDrivingOn(this, ToEnd);
         this.addVehicle(v);
       

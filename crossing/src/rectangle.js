@@ -1,11 +1,12 @@
 class Rotectangle{
-    constructor(x,y,dx,dy,width,height){
+    constructor(x,y,dx,dy,width,height,c=color('rgb(255,0,0)')){
         this.halfWidth = width/2;
         this.halfHeight = height/2;
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
+        this.color = c;
 
         this.setDYDX(dy,dx);
     }    
@@ -34,9 +35,9 @@ class Rotectangle{
         let x4 = this.x + this.halfWidth*this.dx + this.halfHeight*(-this.dy);
         let y4 = this.y - this.halfWidth*this.dy + this.halfHeight*(-this.dx);
 
-        stroke(255,0,0);
+        stroke(this.color);
         strokeWeight(1);
-        fill('rgb(255,0,0)');
+        fill(this.color);
         quad(x1,y1,x2,y2,x3,y3,x4,y4);
 
         noStroke();

@@ -14,8 +14,11 @@ function setup() {
   drawHeight = windowHeight;
   createCanvas(drawWidth, drawHeight);
 
-  let spawner = new ManualSpawner();
-  // let spawner = new AutoSpawner(1000);
+  initVehicleFactory(new DefaultVehicleFactory());
+  // initVehicleFactory(new MasterSlaveVehicleFactory());
+
+  // let spawner = new ManualSpawner();
+  let spawner = new AutoSpawner(1000);
   crossing = new StandardCrossing(spawner);
   // crossing = new DoubleLaneCrossing(spawner);
   // crossing = new Roundabout(spawner);
