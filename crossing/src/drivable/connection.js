@@ -54,7 +54,7 @@ class Connection{
                 }
                 return !occupiedByUs;
             }
-            conflict.setOccupation(vehicle);
+            conflict.setOccupation(new StandardOccupation(vehicle));
         }else if(occupiedByUs){
             conflict.setOccupation(null);
         }
@@ -133,5 +133,13 @@ class Connection{
 
     getConflicts(){
         return this.conflicts;
+    }
+
+    getLinks(at){
+        if(at == ToStart){
+            return [this.from];
+        }else if(at == ToEnd){
+            return [this.to];
+        }else return [];
     }
 }

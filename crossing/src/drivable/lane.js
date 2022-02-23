@@ -45,28 +45,28 @@ class Lane{
         this.drawConnections(this.connectedAtEnd);
     }
 
-    drawConnections(connections){
-        for(let con of connections){
+    drawConnections(links){
+        for(let link of links){
+            let con = link.toDrivable;
             con.draw();
         }
     }
 
-    connectAtStart(lane){
-        this.connectAt(lane, this.start, lane.start);
-
+    connectAtStart(lane, newTowards = ToEnd){
+        this.connectAt(lane, this.start, lane.start, newTowards);
     }
 
-    connectAtEnd(lane){
-        this.connectAt(lane, this.end, lane.start);
+    connectAtEnd(lane, newTowards = ToEnd){
+        this.connectAt(lane, this.end, lane.start, newTowards);
     }
 
     getNextDrivingOn(progression,vehicle){
         if(progression <= 0){
             this.removeVehicle(vehicle);
-            return this.connectedAtStart[parseInt(Math.random()*this.connectedAtStart.length)];
+            return this.connectedAtStart[parseInt(Math.random()*this.connectedAtStart.length)]?.toDrivable;
         }else if(progression >= 1){
             this.removeVehicle(vehicle);
-            return this.connectedAtEnd[parseInt(Math.random()*this.connectedAtEnd.length)];
+            return this.connectedAtEnd[parseInt(Math.random()*this.connectedAtEnd.length)]?.toDrivable;
         }else{
             return null;
         }
@@ -80,16 +80,19 @@ class Lane{
         this.vehicles.push(vehicle);
     }
 
-    connectAt(lane, fromAt, toAt){
+    connectAt(lane, fromAt, toAt, newTowards){
         colorMode(HSB);
         let c = color(map(Math.random(), 0.0, 1.0, 0, 360),255,255);
         this.connectedAtEnd.push(
-            new Connection(
-                this, 
-                lane, 
-                fromAt, 
-                toAt, 
-                c));
+            new Link(
+                new Connection(
+                    this, 
+                    lane, 
+                    fromAt, 
+                    toAt, 
+                    c),
+                newTowards
+            ));
     }
 
     shouldWait(progression, vehicle){
@@ -106,15 +109,16 @@ class Lane{
         }
         if(wait) return wait;
 
-        let connections = this.connectedAtEnd;
+        let links = this.connectedAtEnd;
         if(vehicle.drivingTowards == ToStart){
-            connections = this.connectedAtStart;
+            links = this.connectedAtStart;
         }
 
         let distToNext = (1-vehicle.relativeProgression())*this.getLength();
         if(distToNext > vehicle.height*1.5);
 
-        for(let c of connections){
+        for(let l of links){
+            let c = l.toDrivable;
             let inverse = false;
             if(c.toLoc == this) inverse = true;
 
@@ -163,6 +167,14 @@ class Lane{
         this.addVehicle(v);
       
         vehicles.push(v);
+    }
+
+    getLinks(at){
+        if(at == ToStart){
+            return this.connectedAtStart;
+        }else if(at == ToEnd){
+            return this.connectedAtEnd;
+        }else return [];
     }
 }
 

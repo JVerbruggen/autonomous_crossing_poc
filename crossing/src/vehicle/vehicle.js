@@ -2,15 +2,15 @@ const ToStart = -1;
 const ToEnd = 1;
 
 class DefaultVehicle{
-    constructor(x,y,dx,dy){
+    constructor(x,y,dx,dy,drivingOn,drivingTowards){
         this.x = x;
         this.y = y;
         this.dx = dx;
         this.dy = dy;
         this.speed = Math.random() * 3 + 3;
-        this.drivingOn = null;
+        this.drivingOn = drivingOn;
         this.drivingOnProgression = 1;
-        this.drivingTowards = null;
+        this.drivingTowards = drivingTowards;
         this.width = 20;
         this.height = 35;
 
@@ -53,13 +53,12 @@ class DefaultVehicle{
         this.y = loc.loc.y;
         this.dx = loc.dir.x;
         this.dy = loc.dir.y;
-
-        this.visRectangle.x = this.x;
-        this.visRectangle.y = this.y;
-        this.visRectangle.setDYDX(this.dy,this.dx);
     }
 
     draw(){
+        this.visRectangle.x = this.x;
+        this.visRectangle.y = this.y;
+        this.visRectangle.setDYDX(this.dy,this.dx);
         this.visRectangle.draw();
     }
 
@@ -73,8 +72,9 @@ class DefaultVehicle{
 }
 
 class SlaveVehicle extends DefaultVehicle{
-    constructor(x,y,dx,dy){
-        super(x,y,dx,dy);
+    constructor(x,y,dx,dy,drivingOn,drivingTowards,routeCalculator){
+        super(x,y,dx,dy,drivingOn,drivingTowards);
+        this.route = routeCalculator.calculate(new RoutePoint(drivingOn, drivingTowards));
     }
 
     getNewVisual(){
@@ -82,27 +82,6 @@ class SlaveVehicle extends DefaultVehicle{
     }
 
     doTick(){
-        this.x += this.dx;
-        this.y += this.dy;
-        this.visRectangle.x = this.x;
-        this.visRectangle.y = this.y;
-        this.visRectangle.setDYDX(this.dy,this.dx);
-    }
-}
-
-var vehicleFactory;
-function initVehicleFactory(factory){
-    this.vehicleFactory = factory;
-}
-
-class DefaultVehicleFactory{
-    CreateNewVehicle(x,y,dx,dy){
-        return new DefaultVehicle(x,y,dx,dy);
-    }
-}
-
-class MasterSlaveVehicleFactory{
-    CreateNewVehicle(x,y,dx,dy){
-        return new SlaveVehicle(x,y,dx,dy);
+        // no calculations done for the vehicle itself, done by supervisor
     }
 }

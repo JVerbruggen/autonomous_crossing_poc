@@ -28,8 +28,8 @@ class ConflictSection{
         circle(x,y,5);
     }
 
-    setOccupation(vehicle){
-        this.occupiedBy = vehicle;
+    setOccupation(occupation){
+        this.occupiedBy = occupation;
     }
 
     isOccupied(){
@@ -37,6 +37,7 @@ class ConflictSection{
     }
 
     isOccupiedBy(vehicle){
-        return this.occupiedBy == vehicle;
+        if(this.occupiedBy == null) return false;
+        return this.occupiedBy.isOccupiedBy(vehicle);
     }
 }

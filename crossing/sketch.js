@@ -3,6 +3,7 @@ var drawHeight;
 var crossing;
 var vehicles;
 var conflicts;
+var supervisor;
 
 class Environment{
   static displayConnections = false;
@@ -14,8 +15,9 @@ function setup() {
   drawHeight = windowHeight;
   createCanvas(drawWidth, drawHeight);
 
+  let routeCalculator = new RandomRouteCalculator();
   initVehicleFactory(new DefaultVehicleFactory());
-  // initVehicleFactory(new MasterSlaveVehicleFactory());
+  // initVehicleFactory(new MasterSlaveVehicleFactory(routeCalculator));
 
   // let spawner = new ManualSpawner();
   let spawner = new AutoSpawner(1000);
@@ -23,6 +25,8 @@ function setup() {
   // crossing = new DoubleLaneCrossing(spawner);
   // crossing = new Roundabout(spawner);
   vehicles = [];
+
+  supervisor = vehicleFactory.CreateSupervisor();
 
   conflicts = new BlockSectionVisitor(30, 20).visitCrossing(crossing);
 }
@@ -65,18 +69,7 @@ function keyReleased(){
 }
 
 function updateVehicles(){
-  let i = 0;
-  for(let vehicle of vehicles){
-    if(vehicle.drivingOn == null){
-      vehicles.splice(i,1);
-      continue;
-    }
-
-    vehicle.doTick();
-    vehicle.draw();
-
-    i++;
-  }
+  supervisor.updateVehicles();
 }
 
 function drawConflicts(conflicts){

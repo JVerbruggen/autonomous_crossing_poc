@@ -64,8 +64,8 @@ class BlockSectionVisitor{
 
         for(let i=0; i<connections.length; i++){
             for(let j = i+1; j<connections.length; j++){
-                let a = connections[i];
-                let b = connections[j];
+                let a = connections[i].toDrivable;
+                let b = connections[j].toDrivable;
                 let conflicts = this.findConflicts(a, b);
 
                 if(conflicts.length != 0){
