@@ -14,13 +14,14 @@ function setup() {
   drawHeight = windowHeight;
   createCanvas(drawWidth, drawHeight);
 
-  // let spawner = new ManualSpawner();
-  let spawner = new AutoSpawner(500);
-  // crossing = new StandardCrossing(spawner);
-  crossing = new DoubleLaneCrossing(spawner);
+  let spawner = new ManualSpawner();
+  // let spawner = new AutoSpawner(1000);
+  crossing = new StandardCrossing(spawner);
+  // crossing = new DoubleLaneCrossing(spawner);
+  // crossing = new Roundabout(spawner);
   vehicles = [];
 
-  conflicts = new BlockSectionVisitor(30, 80).visitCrossing(crossing);
+  conflicts = new BlockSectionVisitor(30, 20).visitCrossing(crossing);
 }
 
 function draw() {
@@ -34,11 +35,14 @@ function draw() {
 }
 
 function drawHelp(){
-  noStroke();
+  let size = 25;
+  let i = 0;
+  let base = size;
+  stroke(255);
   fill(0);
-  textSize(15);
-  text("Hold CTRL to see connections",15,20);
-  text("Hold SHIFT to see conflicts",15,35);
+  textSize(size);
+  text("Hold CTRL to see connections",15,base+size*i++);
+  text("Hold SHIFT to see conflicts",15,base+size*i++);
 }
 
 function keyPressed(){

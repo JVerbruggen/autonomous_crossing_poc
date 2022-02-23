@@ -7,7 +7,7 @@ class Vehicle{
         this.y = y;
         this.dx = dx;
         this.dy = dy;
-        this.speed = 3;
+        this.speed = Math.random() * 3 + 3;
         this.drivingOn = null;
         this.drivingOnProgression = 1;
         this.drivingTowards = null;

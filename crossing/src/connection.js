@@ -28,7 +28,7 @@ class Connection{
     shouldWait(progression, vehicle){
         let wait = false;
 
-        let aroundBounds = vehicle.height/(this.getLength()*50);
+        let aroundBounds = vehicle.height/(this.getLength()) * 1.0;
         for(let conflict of this.conflicts){
             if(conflict.conA === this){
                 wait = this.checkConflict(conflict, vehicle, progression, conflict.fromA-aroundBounds, conflict.toA);
